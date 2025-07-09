@@ -17,6 +17,22 @@
 
 ---
 
+## 🧬 Technologies Used
+
+- HTML5, CSS3, JavaScript (Vanilla)
+
+- SVG Animations (Quantum Gates)
+
+- tsParticles for glowing particle background
+
+- canvas-confetti for win fireworks
+
+- SpeechRecognition API (Web Speech)
+
+- Responsive Design (Desktop + Mobile)
+
+---
+
 ## 🖼️ Preview
 
 ![Quantum Gameplay Preview](Banner.png)
