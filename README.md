@@ -26,10 +26,28 @@
 ## 📂 Folder Structure
 
 Quantum-Tic-Tac-Toe/
+
 │
+
 ├── index.html # Main HTML
+
 ├── style.css # Glowing UI, animations, particle styling
+
 ├── script.js # Game logic, AI mode, quiz logic
+
 ├── chill_music.mp3 # Background music (optional)
+
 ├── Banner.png # Intro banner
-└── README.md # This file
+
+
+---
+
+## 🛠️ Setup Instructions
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/shreyaskharat19/quantum-tic-tac-toe.git
+   cd quantum-tic-tac-toe
+
+2. **Open The Game**
+   Just open index.html in your browser. No server needed!
