@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quantum Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Intro Screen -->
+<div id="introScreen" class="intro-modal">
+  <img src="Banner.png" alt="Quantum Tic Tac Toe Intro" class="intro-image">
+  <button onclick="hideIntro()" class="intro-button">Continue ▶️</button>
+</div>
+
+<!-- Main Game Container -->
+<div class="game-container">
+
+  <!-- Start Screen -->
+  <div id="startScreen" class="modal hidden">
+    <div class="intro-overlay">
+      <div class="modal-content">
+        <h2>Enter Player Names</h2>
+        <input type="text" id="playerXName" placeholder="Player X Name" required>
+        <input type="text" id="playerOName" placeholder="Player O Name" required>
+        <button onclick="startGame()" class="modal-button">Start Game ▶️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Heading -->
+  <h1>Quantum Tic-Tac-Toe</h1>
+  <div id="turnIndicator" class="turn-indicator">🔄 Turn: Player X</div>
+
+  <!-- Scoreboard -->
+  <div class="scoreboard">
+    <div>❌ X: <span id="scoreX">0</span></div>
+    <div>⭕ O: <span id="scoreO">0</span></div>
+    <div>🤝 Draws: <span id="scoreDraw">0</span></div>
+  </div>
+
+  <!-- Game History -->
+  <div id="historyLog" class="history-log">
+    <h3>🏁 Game History</h3>
+    <ul id="historyList"></ul>
+  </div>
+
+  <!-- Control Buttons -->
+  <div class="controls">
+    <button onclick="restartGame()">🔄 Restart Game</button>
+    <button onclick="resetScores()">🧹 Reset Scores</button>
+  </div>
+
+  <!-- Game Board -->
+  <div id="board"></div>
+
+  <!-- Win Modal -->
+  <div id="winModal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="winMessage"></h2>
+      <button onclick="restartGame()" class="modal-button">Play Again 🔁</button>
+    </div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" src="chill_music.mp3" autoplay loop></audio>
+  <button id="muteBtn" onclick="toggleMusic()">🔊 Music</button>
+</div>
+
+<!-- Quantum Gate Animation Modal -->
+<div id="gateModal" class="modal hidden">
+  <div class="modal-content">
+    <h2>Quantum Gates in Action</h2>
+
+    <div class="quantum-animation">
+      <svg viewBox="0 0 300 100" class="quantum-gate">
+        <!-- Hadamard Gate -->
+        <rect x="10" y="20" width="60" height="60" rx="10" class="gate-glow"/>
+        <text x="40" y="55" class="gate-label">H</text>
+
+        <!-- X Gate -->
+        <rect x="80" y="20" width="60" height="60" rx="10" class="gate-glow"/>
+        <text x="110" y="55" class="gate-label">X</text>
+
+        <!-- Z Gate -->
+        <rect x="150" y="20" width="60" height="60" rx="10" class="gate-glow"/>
+        <text x="180" y="55" class="gate-label">Z</text>
+
+        <!-- CNOT Gate -->
+        <circle cx="240" cy="40" r="10" class="gate-glow"/>
+        <line x1="240" y1="40" x2="240" y2="80" class="cnot-line"/>
+        <circle cx="240" cy="80" r="10" stroke="#0ff" stroke-width="3" fill="none"/>
+      </svg>
+      <p class="gate-info">Each gate represents a quantum operation—observe how they influence qubit behavior!</p>
+    </div>
+
+    <button onclick="showQuiz()" class="modal-button">Next ➡️</button>
+  </div>
+</div>
+
+<!-- Quiz Modal with MCQs -->
+<div id="quizModal" class="modal hidden">
+  <div class="modal-content">
+    <h1 style="margin-bottom: 10px; color: #00ffff;">🔐 Verification Required</h1>
+    <h2 id="quizQuestion">Loading question...</h2>
+    <div id="quizOptions"></div>
+    <button onclick="checkQuizAnswer()" class="modal-button">Submit</button>
+    <button onclick="startVoiceInput()" class="modal-button">🎙️ Speak</button>
+    <button onclick="learnMore()" class="modal-button">📘 Learn More</button>
+    <p id="quizFeedback"></p>
+  </div>
+</div>
+
+<!-- Visual Effects -->
+<canvas id="particles"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<script>
+tsParticles.load("particles", {
+  background: { color: "#000" },
+  particles: {
+    number: { value: 100 },
+    color: { value: "#00ffff" },
+    shape: { type: "circle" },
+    opacity: { value: 0.6 },
+    size: { value: 3 },
+    move: { speed: 1, outModes: { default: "bounce" } }
+  },
+  interactivity: {
+    events: { onHover: { enable: true, mode: "repulse" } },
+    modes: { repulse: { distance: 100 } }
+  },
+  fullScreen: { zIndex: -2 }
+});
+</script>
+
+<script>
+document.querySelector('.game-container').addEventListener('mousemove', e => {
+  const container = e.currentTarget;
+  const rect = container.getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  container.style.transform = `rotateY(${x * 0.02}deg) rotateX(${y * -0.02}deg)`;
+});
+</script>
+
+<!-- Scripts -->
+<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<!-- Buttons -->
+<button id="collapseBtn" onclick="manualCollapse()" style="position:fixed;bottom:70px;right:20px;z-index:1000;">⚛️ Collapse</button>
+<button id="themeToggleBtn" onclick="toggleTheme()" style="position:fixed;bottom:120px;right:20px;z-index:1000;">🌓 Theme</button>
+<div style="position:fixed;bottom:170px;right:20px;z-index:1000;">
+  <label style="color:#fff;font-size:14px;">
+    <input type="checkbox" id="aiMode" onchange="toggleAIMode()"> 🤖 AI Mode
+  </label>
+</div>
+
+<!-- Intro/Quiz Flow -->
+<script>
+  function hideIntro() {
+    document.getElementById("introScreen").style.display = "none";
+    document.getElementById("gateModal").classList.remove("hidden");
+  }
+
+  function showQuiz() {
+    document.getElementById("gateModal").classList.add("hidden");
+    document.getElementById("quizModal").classList.remove("hidden");
+    askRandomQuiz();
+  }
+
+  const quizQuestions = [
+    { q: "What does a Hadamard gate do?", a: "creates superposition" },
+    { q: "What is the main property of a CNOT gate?", a: "entanglement" },
+    { q: "Which gate flips a qubit?", a: "x" },
+    { q: "Which gate rotates the phase?", a: "z" }
+  ];
+
+  function askRandomQuiz() {
+    const quiz = quizQuestions[Math.floor(Math.random() * quizQuestions.length)];
+    document.getElementById("quizQuestion").textContent = quiz.q;
+    document.getElementById("quizAnswer").dataset.correct = quiz.a.toLowerCase();
+  }
+
+  function checkQuizAnswer() {
+    const input = document.getElementById("quizAnswer").value.trim().toLowerCase();
+    const correct = document.getElementById("quizAnswer").dataset.correct;
+    const feedback = document.getElementById("quizFeedback");
+    if (input === correct) {
+      document.getElementById("quizModal").classList.add("hidden");
+      document.getElementById("startScreen").classList.remove("hidden");
+    } else {
+      feedback.textContent = "❌ Incorrect! Try again or Learn More.";
+    }
+  }
+
+  function learnMore() {
+    window.open("https://quantum.country/qcvc", "_blank");
+  }
+
+  function startVoiceInput() {
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.start();
+    recognition.onresult = (event) => {
+      document.getElementById("quizAnswer").value = event.results[0][0].transcript;
+    };
+  }
+</script>
+
+</body>
+</html>
